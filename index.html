@@ -2,8 +2,10 @@
 <html>
 
 <head>
+
     <title>Customized Festival Posters</title>
     <style>
+        /* Existing styles remain the same */
         body {
             font-family: Arial, sans-serif;
         }
@@ -88,8 +90,8 @@
             <label for="contactNumber">Contact Number:</label>
             <input type="text" id="contactNumber" name="contactNumber">
         </div>
-        <div class="form-group">
-            <label for="logo1">Logo :</label>
+        <div class="form-group" style="display: flex; align-items: center;">
+            <label for="logo1">Logo </label>
             <input type="file" id="logo1" name="logo1" accept="image/*" required>
         </div>
         <div class="form-group">
@@ -98,6 +100,9 @@
         </div>
 
         <button onclick="customizePosters()">Customize Posters</button>
+
+        <!-- New button to download all posters at once -->
+        <button onclick="downloadAllPosters()" style="margin-top: 20px;">Download All Posters</button>
 
         <h3>Available Posters</h3>
         <div id="posters"></div>
@@ -113,12 +118,7 @@
             './img/templet.png',
             './img/templet.png',
             './img/templet.png',
-
-
-            // New logo URL added
-
         ];
-
 
         function loadPosters() {
             const postersDiv = document.getElementById('posters');
@@ -134,13 +134,14 @@
                 postersDiv.appendChild(posterDiv);
             });
         }
+
         function customizePosters() {
             const businessName = document.getElementById('businessName').value;
             const contactNumber = document.getElementById('contactNumber').value;
             const logoFile1 = document.getElementById('logo1').files[0];
             const logoFile2 = document.getElementById('logo2').files[0];
 
-            if (!businessName && !contactNumber && !logoFile1 && !logoFile2) {
+            if ( !logoFile1 || !logoFile2) {
                 alert('Please fill in all fields and select both logos.');
                 return;
             }
@@ -158,27 +159,39 @@
                     posters.forEach((poster, index) => {
                         const detailsDiv = poster.querySelector('.details');
                         detailsDiv.innerHTML = `
-    <img src="${logoUrl1}" alt="Logo 1" style="width: 20px; height: 50px; margin-bottom: 10px "><br>
-    <img src="${logoUrl2}" alt="Logo 2" style="width: 20px; height: 20px; margin-bottom: 10px "; margin-left: 100px; ><br>
-    <strong>${businessName}</strong><br>
-    ${contactNumber}
-`;
-                        detailsDiv.dataset.logoUrl1 = logoUrl1; // Add this line
-                        detailsDiv.dataset.logoUrl2 = logoUrl2; // Add this line
-                        detailsDiv.dataset.businessName = businessName; // Add this line
-                        detailsDiv.dataset.contactNumber = contactNumber; // Add this line
+                            <img src="${logoUrl1}" alt="Logo 1" style="width: 20px; height: 20px; margin-bottom: 10px;"><br>
+                            <img src="${logoUrl2}" alt="Logo 2" style="width: 20px; height: 20px; margin-bottom: 10px;"><br>
+                            <strong>${businessName}</strong><br>
+                            ${contactNumber}
+                        `;
+                        detailsDiv.dataset.logoUrl1 = logoUrl1;
+                        detailsDiv.dataset.logoUrl2 = logoUrl2;
+                        detailsDiv.dataset.businessName = businessName;
+                        detailsDiv.dataset.contactNumber = contactNumber;
                     });
                 };
                 reader2.readAsDataURL(logoFile2);
             };
             reader1.readAsDataURL(logoFile1);
         }
+
         function downloadPoster(index) {
+            createPosterCanvas(index);
+        }
+
+        function downloadAllPosters() {
+            const posterCount = document.querySelectorAll('.poster').length;
+            for (let i = 0; i < posterCount; i++) {
+                createPosterCanvas(i);
+            }
+        }
+
+        function createPosterCanvas(index) {
             const posterImg = document.getElementById(`poster${index}`);
             const detailsDiv = document.getElementById(`details${index}`);
 
-            const logoUrl1 = detailsDiv.dataset.logoUrl1; // Get logo 1 URL
-            const logoUrl2 = detailsDiv.dataset.logoUrl2; // Get logo 2 URL
+            const logoUrl1 = detailsDiv.dataset.logoUrl1;
+            const logoUrl2 = detailsDiv.dataset.logoUrl2;
             const businessName = detailsDiv.dataset.businessName;
             const contactNumber = detailsDiv.dataset.contactNumber;
 
@@ -192,34 +205,28 @@
                 canvas.height = img.height;
                 context.drawImage(img, 0, 0);
 
-                // Draw Logo 1
                 if (logoUrl1) {
                     const logoImg1 = new Image();
                     logoImg1.crossOrigin = 'anonymous';
                     logoImg1.src = logoUrl1;
                     logoImg1.onload = () => {
-                        context.drawImage(logoImg1, 450, canvas.height - 1100, 200, 300);
+                        context.drawImage(logoImg1, 400, canvas.height - 900, 300, 80);
 
-                        // Draw Logo 2
                         if (logoUrl2) {
                             const logoImg2 = new Image();
                             logoImg2.crossOrigin = 'anonymous';
                             logoImg2.src = logoUrl2;
                             logoImg2.onload = () => {
-                                const marginRight = 20; // Desired right margin
-                                const logoWidth = 1000; // Width of the footer logo
-                                context.drawImage(logoImg2, canvas.width - logoWidth - marginRight, canvas.height - 100, logoWidth, 60);
+                                context.drawImage(logoImg2, canvas.width - 1000 - 20, canvas.height - 100, 1000, 60);
 
-                                // Add text
                                 context.fillStyle = 'white';
                                 context.font = '50px Arial';
                                 context.fillText(businessName, 250, canvas.height - 40);
                                 context.fillText(contactNumber, 450, canvas.height - 40);
 
-                                // Download the canvas as an image
                                 const link = document.createElement('a');
                                 link.href = canvas.toDataURL('image/png');
-                                link.download = `customized_poster${index + 50}.png`;
+                                link.download = `customized_poster${index + 1}.png`;
                                 link.click();
                             };
                         }

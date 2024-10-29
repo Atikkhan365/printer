@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Customized Festival Posters</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .poster {
+            margin: 20px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .poster img {
+            width: 200px;
+            height: auto;
+        }
+
+        .poster .details {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+        }
+
+        .download-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-button:hover {
+            background-color: #007B9E;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Upload Your Details</h2>
+        <div class="form-group">
+            <label for="businessName">Business Name:</label>
+            <input type="text" id="businessName" name="businessName">
+        </div>
+        <div class="form-group">
+            <label for="contactNumber">Contact Number:</label>
+            <input type="text" id="contactNumber" name="contactNumber">
+        </div>
+        <div class="form-group">
+            <label for="logo1">Logo :</label>
+            <input type="file" id="logo1" name="logo1" accept="image/*" required>
+        </div>
+        <div class="form-group">
+            <label for="logo2">Footer:</label>
+            <input type="file" id="logo2" name="logo2" accept="image/*" required>
+        </div>
+
+        <button onclick="customizePosters()">Customize Posters</button>
+
+        <h3>Available Posters</h3>
+        <div id="posters"></div>
+    </div>
+
+    <script>
+        const posterURLs = [
+            './img/templet.png',
+            './img/templet.png',
+            './img/templet.png',
+            './img/templet.png',
+            './img/templet.png',
+            './img/templet.png',
+            './img/templet.png',
+            './img/templet.png',
+
+
+            // New logo URL added
+
+        ];
+
+
+        function loadPosters() {
+            const postersDiv = document.getElementById('posters');
+            postersDiv.innerHTML = '';
+            posterURLs.forEach((url, index) => {
+                const posterDiv = document.createElement('div');
+                posterDiv.className = 'poster';
+                posterDiv.innerHTML = `
+                    <img src="${url}" alt="Poster" id="poster${index}">
+                    <div class="details" id="details${index}"></div>
+                    <button class="download-button" onclick="downloadPoster(${index})">Download Poster</button>
+                `;
+                postersDiv.appendChild(posterDiv);
+            });
+        }
+        function customizePosters() {
+            const businessName = document.getElementById('businessName').value;
+            const contactNumber = document.getElementById('contactNumber').value;
+            const logoFile1 = document.getElementById('logo1').files[0];
+            const logoFile2 = document.getElementById('logo2').files[0];
+
+            if (!businessName && !contactNumber && !logoFile1 && !logoFile2) {
+                alert('Please fill in all fields and select both logos.');
+                return;
+            }
+
+            const reader1 = new FileReader();
+            const reader2 = new FileReader();
+
+            reader1.onload = function (e) {
+                const logoUrl1 = e.target.result;
+
+                reader2.onload = function (e) {
+                    const logoUrl2 = e.target.result;
+
+                    const posters = document.querySelectorAll('.poster');
+                    posters.forEach((poster, index) => {
+                        const detailsDiv = poster.querySelector('.details');
+                        detailsDiv.innerHTML = `
+    <img src="${logoUrl1}" alt="Logo 1" style="width: 20px; height: 50px; margin-bottom: 10px "><br>
+    <img src="${logoUrl2}" alt="Logo 2" style="width: 20px; height: 20px; margin-bottom: 10px "; margin-left: 100px; ><br>
+    <strong>${businessName}</strong><br>
+    ${contactNumber}
+`;
+                        detailsDiv.dataset.logoUrl1 = logoUrl1; // Add this line
+                        detailsDiv.dataset.logoUrl2 = logoUrl2; // Add this line
+                        detailsDiv.dataset.businessName = businessName; // Add this line
+                        detailsDiv.dataset.contactNumber = contactNumber; // Add this line
+                    });
+                };
+                reader2.readAsDataURL(logoFile2);
+            };
+            reader1.readAsDataURL(logoFile1);
+        }
+        function downloadPoster(index) {
+            const posterImg = document.getElementById(`poster${index}`);
+            const detailsDiv = document.getElementById(`details${index}`);
+
+            const logoUrl1 = detailsDiv.dataset.logoUrl1; // Get logo 1 URL
+            const logoUrl2 = detailsDiv.dataset.logoUrl2; // Get logo 2 URL
+            const businessName = detailsDiv.dataset.businessName;
+            const contactNumber = detailsDiv.dataset.contactNumber;
+
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = posterImg.src;
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                context.drawImage(img, 0, 0);
+
+                // Draw Logo 1
+                if (logoUrl1) {
+                    const logoImg1 = new Image();
+                    logoImg1.crossOrigin = 'anonymous';
+                    logoImg1.src = logoUrl1;
+                    logoImg1.onload = () => {
+                        context.drawImage(logoImg1, 450, canvas.height - 1100, 200, 300);
+
+                        // Draw Logo 2
+                        if (logoUrl2) {
+                            const logoImg2 = new Image();
+                            logoImg2.crossOrigin = 'anonymous';
+                            logoImg2.src = logoUrl2;
+                            logoImg2.onload = () => {
+                                const marginRight = 20; // Desired right margin
+                                const logoWidth = 1000; // Width of the footer logo
+                                context.drawImage(logoImg2, canvas.width - logoWidth - marginRight, canvas.height - 100, logoWidth, 60);
+
+                                // Add text
+                                context.fillStyle = 'white';
+                                context.font = '50px Arial';
+                                context.fillText(businessName, 250, canvas.height - 40);
+                                context.fillText(contactNumber, 450, canvas.height - 40);
+
+                                // Download the canvas as an image
+                                const link = document.createElement('a');
+                                link.href = canvas.toDataURL('image/png');
+                                link.download = `customized_poster${index + 50}.png`;
+                                link.click();
+                            };
+                        }
+                    };
+                }
+            };
+        }
+
+        window.onload = loadPosters;
+    </script>
+</body>
+
+</html>

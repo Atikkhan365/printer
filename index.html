@@ -60,7 +60,7 @@
             bottom: 10px;
             left: 10px;
             color: white;
-            background: rgba(0, 0, 0, 0.5);
+            /* background: rgba(0, 0, 0, 0.5); */
             padding: 5px;
         }
 
@@ -82,21 +82,23 @@
 <body>
     <div class="container">
         <h2>Upload Your Details</h2>
-        <div class="form-group">
+        <div class="form-group" style="margin: 52px 0 0px 0px;">
             <label for="businessName">Business Name:</label>
-            <input type="text" id="businessName" name="businessName">
+            <input type="text" id="businessName" name="businessName" style="    border-radius: 35px;
+            background-color: #19e5e536;
+            border-color: #19e5e536;">
         </div>
         <div class="form-group">
             <label for="contactNumber">Contact Number:</label>
-            <input type="text" id="contactNumber" name="contactNumber">
-        </div>
-        <div class="form-group" style="display: flex; align-items: center;">
-            <label for="logo1">Logo </label>
-            <input type="file" id="logo1" name="logo1" accept="image/*" required>
+            <input type="text" id="contactNumber" name="contactNumber" style="    border-radius: 35px;
+            background-color: #19e5e536;
+            border-color: #19e5e536;">
         </div>
         <div class="form-group">
-            <label for="logo2">Footer:</label>
-            <input type="file" id="logo2" name="logo2" accept="image/*" required>
+            <input type="file" id="logo1" name="logo1" accept="image/*" required
+                style="padding: 12px 432px 10px 434px;  background-color: #008CBA;  border-radius: 25px; margin: 52px 0 0px 0px;">
+            <input type="file" id="logo2" name="logo2" accept="image/*" required
+                style="padding: 12px 432px 10px 434px;  background-color: #008CBA;  border-radius: 25px;margin: 14px 0 0 0;">
         </div>
 
         <button onclick="customizePosters()">Customize Posters</button>
@@ -110,14 +112,16 @@
 
     <script>
         const posterURLs = [
-            './img/templet.png',
-            './img/templet.png',
-            './img/templet.png',
-            './img/templet.png',
-            './img/templet.png',
-            './img/templet.png',
-            './img/templet.png',
-            './img/templet.png',
+            './img/image-1024x1024.jpg',
+            './img/image-1024x1024 (1).jpg',
+            './img/image-1024x1024.jpg',
+            './img/image-1024x1024 (1).jpg',
+            './img/image-1024x1024.jpg',
+            './img/image-1024x1024 (1).jpg',
+            './img/image-1024x1024.jpg',
+            './img/image-1024x1024 (1).jpg',
+            './img/image-1024x1024.jpg',
+            './img/image-1024x1024 (1).jpg',
         ];
 
         function loadPosters() {
@@ -129,7 +133,7 @@
                 posterDiv.innerHTML = `
                     <img src="${url}" alt="Poster" id="poster${index}">
                     <div class="details" id="details${index}"></div>
-                    <button class="download-button" onclick="downloadPoster(${index})">Download Poster</button>
+                    <button class="download-button" onclick="downloadPoster(${index})" style="background-color:gree">Download Poster</button>
                 `;
                 postersDiv.appendChild(posterDiv);
             });
@@ -141,7 +145,7 @@
             const logoFile1 = document.getElementById('logo1').files[0];
             const logoFile2 = document.getElementById('logo2').files[0];
 
-            if ( !logoFile1 || !logoFile2) {
+            if (!logoFile1 || !logoFile2) {
                 alert('Please fill in all fields and select both logos.');
                 return;
             }
@@ -159,8 +163,8 @@
                     posters.forEach((poster, index) => {
                         const detailsDiv = poster.querySelector('.details');
                         detailsDiv.innerHTML = `
-                            <img src="${logoUrl1}" alt="Logo 1" style="width: 20px; height: 20px; margin-bottom: 10px;"><br>
-                            <img src="${logoUrl2}" alt="Logo 2" style="width: 20px; height: 20px; margin-bottom: 10px;"><br>
+                            <img src="${logoUrl1}" alt="Logo 1" style="    width: 79px; height: 22px;     margin-bottom: 115px;margin-left: -14px;"><br>
+                            <img src="${logoUrl2}" alt="Logo 2" style="    width: 200px; height: 17px; margin-bottom: -24px; margin-left: -15px;"><br>
                             <strong>${businessName}</strong><br>
                             ${contactNumber}
                         `;

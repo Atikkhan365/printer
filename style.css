@@ -194,13 +194,16 @@ button:hover {
 .poster {
     position: relative;
     width: 300px;
-    /* Set according to your image size */
     margin-bottom: 20px;
+    background-color: white;
+
 }
 
 .poster img {
-    width: 100%;
+    width: 90%;
     display: block;
+    margin: auto;
+    padding: 15px 0 8px 0px;
 }
 
 .details {
@@ -220,6 +223,7 @@ button:hover {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    margin-bottom: 10px;
 }
 
 .download-button:hover {

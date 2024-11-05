@@ -113,14 +113,14 @@ const posterURLs = [
         const logoImg1 = new Image();
         logoImg1.src = logoUrl1;
         logoImg1.onload = () => {
-          context.drawImage(logoImg1, 350, canvas.height - 700, 300, 100);
+          context.drawImage(logoImg1, 350, canvas.height - 1000, 300, 100);
 
           // Draw second logo
           if (logoUrl2) {
             const logoImg2 = new Image();
             logoImg2.src = logoUrl2;
             logoImg2.onload = () => {
-              context.drawImage(logoImg2, canvas.width - 1024, canvas.height - 30);
+              context.drawImage(logoImg2, 0, canvas.height - 50, 1050, 50);
 
               // Add text
               context.fillStyle = 'white';

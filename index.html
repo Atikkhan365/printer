@@ -2,245 +2,94 @@
 <html>
 
 <head>
-
     <title>Customized Festival Posters</title>
-    <style>
-        /* Existing styles remain the same */
-        body {
-            font-family: Arial, sans-serif;
-        }
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .form-group {
-            margin: 15px 0;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"],
-        input[type="file"] {
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .poster {
-            margin: 20px;
-            display: inline-block;
-            position: relative;
-        }
-
-        .poster img {
-            width: 200px;
-            height: auto;
-        }
-
-        .poster .details {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            color: white;
-            /* background: rgba(0, 0, 0, 0.5); */
-            padding: 5px;
-        }
-
-        .download-button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #008CBA;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .download-button:hover {
-            background-color: #007B9E;
-        }
-    </style>
 </head>
 
 <body>
+      <div class="logo">
+        <img src="logotb24.png" alt="">
+      </div>
+
+    <div class="navigation">
+        <ul>
+            <li class="active">
+                <a href="#">
+                    <span class="icon">
+                        <i class="fa fa-home" ></i>
+                    </span>
+                    <span class="text">Home</span>
+                </a>
+            </li>
+           <li class="profile-dropdown">
+                <a href="#">
+                    <span class="icon"><i class="fa fa-user"></i></span>
+                    <span class="text">Profile</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <a href="#">View Profile</a>
+                    <a href="#">Edit Profile</a>
+                    <a href="#">Settings</a>
+                </ul>
+            </li>
+            <li >
+                <a href="#">
+                    <span class="icon">
+                        <i class="fa fa-comment" >
+                        </i>
+                    </span>
+                    <span class="text">Massage</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon">
+                        <i class="fa fa-camera" ></i>
+                    </span>
+                        <span class="text">Photos</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span class="icon">
+                        <i class="fa fa-gear" ></i>
+                    </span>
+                        <span class="text">Settings</span>
+                </a>
+            </li>
+
+            <div class="indicator"></div>
+        </ul>
+    </div>
     <div class="container">
-        <h2>Upload Your Details</h2>
-        <div class="form-group" style="margin: 52px 0 0px 0px;">
+        <h2 >Upload Your Details</h2>
+        <div class="form-group">
             <label for="businessName">Business Name:</label>
-            <input type="text" id="businessName" name="businessName" style="    border-radius: 35px;
-            background-color: #19e5e536;
-            border-color: #19e5e536;">
+            <input type="text" id="businessName" name="businessName">
         </div>
         <div class="form-group">
             <label for="contactNumber">Contact Number:</label>
-            <input type="text" id="contactNumber" name="contactNumber" style="    border-radius: 35px;
-            background-color: #19e5e536;
-            border-color: #19e5e536;">
+            <input type="text" id="contactNumber" name="contactNumber">
         </div>
         <div class="form-group">
             <input type="file" id="logo1" name="logo1" accept="image/*" required
-                style="padding: 12px 432px 10px 434px;  background-color: #008CBA;  border-radius: 25px; margin: 52px 0 0px 0px;">
+                style="padding: 12px 432px 10px 434px; margin: 52px 0 0 0 ;     background-color: #74093759;">
             <input type="file" id="logo2" name="logo2" accept="image/*" required
-                style="padding: 12px 432px 10px 434px;  background-color: #008CBA;  border-radius: 25px;margin: 14px 0 0 0;">
+                style="padding: 12px 432px 10px 434px; margin: 52px 0 0 0 ;     background-color: #74093759; margin-top: 10px;">
         </div>
 
         <button onclick="customizePosters()">Customize Posters</button>
-
-        <!-- New button to download all posters at once -->
         <button onclick="downloadAllPosters()" style="margin-top: 20px;">Download All Posters</button>
 
         <h3>Available Posters</h3>
-        <div id="posters"></div>
+        <div id="posters" class="posters-container"></div>
     </div>
 
-    <script>
-        const posterURLs = [
-            './img/image-1024x1024.jpg',
-            './img/image-1024x1024 (1).jpg',
-            './img/image-1024x1024.jpg',
-            './img/image-1024x1024 (1).jpg',
-            './img/image-1024x1024.jpg',
-            './img/image-1024x1024 (1).jpg',
-            './img/image-1024x1024.jpg',
-            './img/image-1024x1024 (1).jpg',
-            './img/image-1024x1024.jpg',
-            './img/image-1024x1024 (1).jpg',
-        ];
 
-        function loadPosters() {
-            const postersDiv = document.getElementById('posters');
-            postersDiv.innerHTML = '';
-            posterURLs.forEach((url, index) => {
-                const posterDiv = document.createElement('div');
-                posterDiv.className = 'poster';
-                posterDiv.innerHTML = `
-                    <img src="${url}" alt="Poster" id="poster${index}">
-                    <div class="details" id="details${index}"></div>
-                    <button class="download-button" onclick="downloadPoster(${index})" style="background-color:gree">Download Poster</button>
-                `;
-                postersDiv.appendChild(posterDiv);
-            });
-        }
 
-        function customizePosters() {
-            const businessName = document.getElementById('businessName').value;
-            const contactNumber = document.getElementById('contactNumber').value;
-            const logoFile1 = document.getElementById('logo1').files[0];
-            const logoFile2 = document.getElementById('logo2').files[0];
-
-            if (!logoFile1 || !logoFile2) {
-                alert('Please fill in all fields and select both logos.');
-                return;
-            }
-
-            const reader1 = new FileReader();
-            const reader2 = new FileReader();
-
-            reader1.onload = function (e) {
-                const logoUrl1 = e.target.result;
-
-                reader2.onload = function (e) {
-                    const logoUrl2 = e.target.result;
-
-                    const posters = document.querySelectorAll('.poster');
-                    posters.forEach((poster, index) => {
-                        const detailsDiv = poster.querySelector('.details');
-                        detailsDiv.innerHTML = `
-                            <img src="${logoUrl1}" alt="Logo 1" style="    width: 79px; height: 22px;     margin-bottom: 115px;margin-left: -14px;"><br>
-                            <img src="${logoUrl2}" alt="Logo 2" style="    width: 200px; height: 17px; margin-bottom: -24px; margin-left: -15px;"><br>
-                            <strong>${businessName}</strong><br>
-                            ${contactNumber}
-                        `;
-                        detailsDiv.dataset.logoUrl1 = logoUrl1;
-                        detailsDiv.dataset.logoUrl2 = logoUrl2;
-                        detailsDiv.dataset.businessName = businessName;
-                        detailsDiv.dataset.contactNumber = contactNumber;
-                    });
-                };
-                reader2.readAsDataURL(logoFile2);
-            };
-            reader1.readAsDataURL(logoFile1);
-        }
-
-        function downloadPoster(index) {
-            createPosterCanvas(index);
-        }
-
-        function downloadAllPosters() {
-            const posterCount = document.querySelectorAll('.poster').length;
-            for (let i = 0; i < posterCount; i++) {
-                createPosterCanvas(i);
-            }
-        }
-
-        function createPosterCanvas(index) {
-            const posterImg = document.getElementById(`poster${index}`);
-            const detailsDiv = document.getElementById(`details${index}`);
-
-            const logoUrl1 = detailsDiv.dataset.logoUrl1;
-            const logoUrl2 = detailsDiv.dataset.logoUrl2;
-            const businessName = detailsDiv.dataset.businessName;
-            const contactNumber = detailsDiv.dataset.contactNumber;
-
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.src = posterImg.src;
-            img.onload = () => {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                context.drawImage(img, 0, 0);
-
-                if (logoUrl1) {
-                    const logoImg1 = new Image();
-                    logoImg1.crossOrigin = 'anonymous';
-                    logoImg1.src = logoUrl1;
-                    logoImg1.onload = () => {
-                        context.drawImage(logoImg1, 400, canvas.height - 900, 300, 80);
-
-                        if (logoUrl2) {
-                            const logoImg2 = new Image();
-                            logoImg2.crossOrigin = 'anonymous';
-                            logoImg2.src = logoUrl2;
-                            logoImg2.onload = () => {
-                                context.drawImage(logoImg2, canvas.width - 1000 - 20, canvas.height - 100, 1000, 60);
-
-                                context.fillStyle = 'white';
-                                context.font = '50px Arial';
-                                context.fillText(businessName, 250, canvas.height - 40);
-                                context.fillText(contactNumber, 450, canvas.height - 40);
-
-                                const link = document.createElement('a');
-                                link.href = canvas.toDataURL('image/png');
-                                link.download = `customized_poster${index + 1}.png`;
-                                link.click();
-                            };
-                        }
-                    };
-                }
-            };
-        }
-
-        window.onload = loadPosters;
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
